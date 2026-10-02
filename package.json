@@ -7,7 +7,7 @@
         "build": "next build",
         "start": "next start -p 420",
         "lint": "next lint",
-        "deploy": "pnpm run build && touch out/.nojekyll && npx gh-pages -d out -t true"
+        "deploy": "pnpm run build && gh-pages -d out --dotfiles --nojekyll"
     },
     "dependencies": {
         "@react-three/drei": "^9.114.0",
@@ -15,7 +15,7 @@
         "antd": "^5.21.2",
         "framer-motion": "^11.11.1",
         "konva": "^9.3.15",
-        "next": "14.2.14",
+        "next": "15.5.27",
         "next-seo": "^6.6.0",
         "prettier": "^3.3.3",
         "react": "^18",
@@ -31,9 +31,9 @@
         "@typescript-eslint/eslint-plugin": "^5.0.0",
         "@typescript-eslint/parser": "^5.0.0",
         "eslint": "^8.56.0",
-        "eslint-config-next": "14.2.14",
+        "eslint-config-next": "15.5.27",
         "eslint-config-prettier": "^8.5.0",
-        "gh-pages": "^3.2.3",
+        "gh-pages": "^6.3.0",
         "typescript": "^5"
     },
     "husky": {
@@ -49,5 +49,24 @@
         "*.{json,css,md}": [
             "prettier --write"
         ]
-    }
+    },
+    "pnpm": {
+        "overrides": {
+            "nanoid@<3.3.18": "3.3.18",
+            "cross-spawn@^7": "7.0.6",
+            "@babel/runtime@^7": "7.28.4",
+            "js-yaml@^4": "4.3.2",
+            "ajv@^6": "6.14.0",
+            "flatted@^3": "3.4.2",
+            "postcss@^8": "8.5.28",
+            "uuid@^9": "11.1.1",
+            "fflate@^0.8": "0.8.3",
+            "fflate@^0.6": "0.6.11",
+            "brace-expansion@1": "1.1.21",
+            "minimatch@3": "3.1.4",
+            "picomatch@2": "2.3.2",
+            "@ungap/structured-clone": "1.3.1"
+        }
+    },
+    "packageManager": "pnpm@9.15.9"
 }
