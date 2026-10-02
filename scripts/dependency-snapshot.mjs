@@ -13,7 +13,8 @@ function collect(name, node, scope, direct = false) {
     if (node.from !== name || !/^(@[^/]+\/)?[a-zA-Z0-9._-]+$/.test(name) || !/^\d+\.\d+\.\d+(?:[-+].+)?$/.test(node.version)) {
         throw new Error(`Unsupported package identity: ${name}`);
     }
-    const encoded = name.startsWith('@') ? `%40${name.slice(1)}` : encodeURIComponent(name);
+    const normalized = name.toLowerCase();
+    const encoded = normalized.startsWith('@') ? `%40${normalized.slice(1)}` : encodeURIComponent(normalized);
     const url = `pkg:npm/${encoded}@${encodeURIComponent(node.version)}`;
     const dependency = resolved[url] ??= {package_url: url, relationship: 'indirect', scope, dependencies: []};
     if (direct) dependency.relationship = 'direct';
@@ -27,7 +28,7 @@ function collect(name, node, scope, direct = false) {
             children.add(collect(childName, child, scope));
         }
     }
-    dependency.dependencies = [...children].sort();
+    dependency.dependencies = [...new Set([...dependency.dependencies, ...children])].sort();
     return url;
 }
 
@@ -37,9 +38,9 @@ for (const field of ['dependencies', 'optionalDependencies', 'devDependencies'])
     }
 }
 if (!Object.keys(resolved).length) throw new Error('The frozen dependency tree is empty');
-const manifests = Object.fromEntries(['package.json', 'pnpm-lock.yaml'].map(name => [name, {
-    name, file: {source_location: name}, resolved
-}]));
+const manifests = {
+    'pnpm-lock.yaml': {name: 'pnpm-lock.yaml', file: {source_location: 'pnpm-lock.yaml'}, resolved}
+};
 process.stdout.write(JSON.stringify({
     version: 0, sha, ref,
     job: {id: run, correlator: 'main-frozen-pnpm', html_url: `https://github.com/${repository}/actions/runs/${run}`},
