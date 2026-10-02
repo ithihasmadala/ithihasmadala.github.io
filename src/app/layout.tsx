@@ -1,9 +1,13 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 import 'antd/dist/reset.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = localFont({
+    src: './fonts/Inter-Variable.ttf',
+    display: 'swap',
+    weight: '100 900',
+})
 
 export const metadata: Metadata = {
     title: 'Ithihas Madala',
